@@ -57,10 +57,10 @@ def main():
             dest.write_bytes(data)
             success += 1
             status, detail = "OK", f"{len(data)} bytes"
-            print(f"OK {row['number']:02d}/76 {filename} ({len(data)} bytes)")
+            print(f"OK {int(row['number']):02d}/76 {filename} ({len(data)} bytes)")
         except Exception as exc:
             status, detail = "FAILED", str(exc)
-            print(f"FAILED {row['number']:02d}/76 {filename}: {detail}")
+            print(f"FAILED {int(row['number']):02d}/76 {filename}: {detail}")
         report.append({"number": row["number"], "category": row["category"], "name": row["name"], "filename": filename, "source_url": row["source_url"], "status": status, "detail": detail})
     with REPORT.open("w", newline="", encoding="utf-8-sig") as f:
         w=csv.DictWriter(f, fieldnames=list(report[0].keys()))
