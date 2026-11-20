@@ -1,0 +1,36 @@
+
+name: Import cat stickers
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  download-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Download sticker images
+        run: python download_stickers.py
+
+      - name: Commit downloaded files and report
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add emoji download-report.csv
+          if git diff --cached --quiet; then
+            echo "No new files to commit."
+          else
+            git commit -m "Import cat sticker images and report"
+            git push
+          fi
